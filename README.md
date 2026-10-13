@@ -1,68 +1,46 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Reference List
 
-## Available Scripts
+Look up the reference list associated with a DOI. This browser app queries the public [Crossref REST API](https://api.crossref.org/).
 
-In the project directory, you can run:
+**Live demo:** <https://akhilnalliboina.github.io/referenceList/>
 
-### `npm start`
+## Run locally
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Requires Node.js 24 (see `.nvmrc`) and npm.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```sh
+npm ci
+npm start
+```
 
-### `npm test`
+Open <http://localhost:3000>. Enter a DOI such as `10.1038/nphys1170`. You can also enter a DOI URL such as `https://doi.org/10.1038/nphys1170`.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Verify changes
 
-### `npm run build`
+```sh
+CI=true npm test -- --watchAll=false --runInBand
+npm run build
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Tests use fixed Crossref responses. They do not make live API requests. A successful app lookup still depends on Crossref and the browser's network connection. Some works have no reference list in Crossref.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+This repository still uses the legacy Create React App 3 / Webpack 4 toolchain. Its start/build wrapper enables Node's OpenSSL legacy provider only in the child process because Webpack 4 uses an obsolete hash. Plan a separate build-tool migration; do not copy this compatibility workaround into new projects.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deploy
 
-### `npm run eject`
+The production build is configured for the GitHub Pages project path:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```sh
+npm run build
+npm run deploy
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The `homepage` setting builds assets for the `/referenceList/` Pages path. The deploy command publishes the `build/` directory to the `gh-pages` branch. It requires write access to this repository and Git authentication configured for the current shell. Do not commit API credentials; this project uses Crossref's public API without an API key.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Scope and limits
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This app displays the reference metadata Crossref returns. It does not guarantee that every work has complete or structured references. Citation coverage depends on publisher deposits in Crossref. The app does not search forward citations.
 
-## Learn More
+## License
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+This repository does not currently declare a license. Do not assume that it is licensed for reuse until the owner adds one.
